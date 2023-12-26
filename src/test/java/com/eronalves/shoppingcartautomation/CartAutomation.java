@@ -22,21 +22,24 @@ public class CartAutomation {
     driver = new ChromeDriver();
   }
 
-  @Test
-  public void doIncludeInCartList ()
-      throws InterruptedException {
-    driver.get("https://www.amazon.com.br/");
-    WebElement homeSearchBox = driver.findElement(By.id("twotabsearchtextbox"));
-    homeSearchBox.sendKeys("iphone");
-    homeSearchBox.submit();
-    WebElement brandFilter = driver.findElement(By.id("brandsRefinements"));
-    WebElement appleFilter = brandFilter.findElement(By.linkText("Apple"));
-    appleFilter.click();
-    WebElement iphone13Link =
-        driver.findElement(By.partialLinkText("iPhone 13"));
-    iphone13Link.click();
-    WebElement addToCart = driver.findElement(By.id("add-to-cart-button"));
-    addToCart.click();
+  private void search (String product) {
+    WebElement searchBox = driver.findElement(By.id("twotabsearchtextbox"));
+    searchBox.sendKeys(product);
+    searchBox.submit();
+  }
+
+  private void filterByBrand (String brand) {
+    driver.findElement(By.id("brandsRefinements"))
+        .findElement(By.linkText(brand))
+        .click();
+  }
+
+  private void clickOnProduct (String partialProductName) {
+    driver.findElement(By.partialLinkText(partialProductName)).click();
+  }
+
+  private void addToCart () {
+    driver.findElement(By.id("add-to-cart-button")).click();
     List<WebElement> addCoverageButton =
         driver.findElements(By.id("attachSiNoCoverage"));
     if (!addCoverageButton.isEmpty()) {
@@ -49,6 +52,16 @@ public class CartAutomation {
       );
       input.click();
     }
+  }
+
+  @Test
+  public void doIncludeInCartList ()
+      throws InterruptedException {
+    driver.get("https://www.amazon.com.br/");
+    search("iphone");
+    filterByBrand("Apple");
+    clickOnProduct("iPhone 13");
+    addToCart();
   }
 
 }
