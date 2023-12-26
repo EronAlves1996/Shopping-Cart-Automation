@@ -24,6 +24,7 @@ public class CartAutomation {
 
   private void search (String product) {
     WebElement searchBox = driver.findElement(By.id("twotabsearchtextbox"));
+    searchBox.click();
     searchBox.sendKeys(product);
     searchBox.submit();
   }
@@ -54,6 +55,10 @@ public class CartAutomation {
     }
   }
 
+  private void waitToLoadPage (String pageTitle) {
+    new WebDriverWait(driver, 2).until(t -> t.getTitle().equals(pageTitle));
+  }
+
   @Test
   public void doIncludeInCartList ()
       throws InterruptedException {
@@ -62,6 +67,9 @@ public class CartAutomation {
     filterByBrand("Apple");
     clickOnProduct("iPhone 13");
     addToCart();
+    waitToLoadPage("Carrinho de compras da Amazon.com");
+    search("Carregador iphone");
+    filterByBrand("Apple");
   }
 
 }
