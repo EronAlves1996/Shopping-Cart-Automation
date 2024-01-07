@@ -63,12 +63,32 @@ public class CartAutomation {
   public void doIncludeInCartList ()
       throws InterruptedException {
     driver.get("https://www.amazon.com.br/");
-    search("iphone");
-    filterByBrand("Apple");
-    clickOnProduct("iPhone 13");
+    searchAndBuyAppleProduct("iphone", "iPhone 13");
+    searchAndBuyAppleProduct("Carregador iphone", "Cabo");
+    searchAndBuyAppleProduct("Carregador iphone", "Adaptador");
+    searchAndBuyAppleProduct("fone de ouvido apple", "Apple AirPods");
+    searchAndBuyAppleProduct("macbook", "MacBook Air");
+  }
+
+  private void searchAndBuyAppleProduct (
+      String keyword,
+      String product
+  )
+      throws InterruptedException {
+    search(keyword);
+    getOnlyAppleProducts();
+    addProductToCart(product);
+  }
+
+  private void addProductToCart (String product)
+      throws InterruptedException {
+    clickOnProduct(product);
+    Thread.sleep(1000);
     addToCart();
     waitToLoadPage("Carrinho de compras da Amazon.com");
-    search("Carregador iphone");
+  }
+
+  private void getOnlyAppleProducts () {
     filterByBrand("Apple");
   }
 
